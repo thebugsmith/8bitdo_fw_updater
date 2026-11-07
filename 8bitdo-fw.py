@@ -31,6 +31,11 @@ import struct
 import sys
 import time
 
+try:                     # hidapi: the transport for Windows (pip install hidapi)
+    import hid as _hidapi  # type: ignore[import]
+except Exception:        # Linux with /dev/hidraw needs no third-party package
+    _hidapi = None
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 VENDOR_ID = 0x2DC8
 
@@ -132,8 +137,54 @@ def parse_report_ids(desc):
     return rin, rout
 
 
+def backend():
+    """Which transport to use.
+
+    hidraw on Linux (no dependencies), hidapi everywhere else — and on Linux too
+    when `8BITDO_BACKEND=hidapi` is set, which is how this path is tested on a
+    Linux box.
+    """
+    env = os.environ.get("8BITDO_BACKEND", "").strip().lower()
+    if env in ("hidraw", "hidapi"):
+        return env
+    if os.path.isdir("/sys/class/hidraw"):
+        return "hidraw"
+    return "hidapi" if _hidapi is not None else "hidraw"
+
+
+def _hidlib():
+    """The hidapi module, or a clear install message."""
+    if _hidapi is None:
+        need_hidapi()
+    return _hidapi
+
+
+def need_hidapi():
+    raise SystemExit(
+        "This platform needs the hidapi package:\n\n"
+        "  py -m pip install hidapi\n\n"
+        "Linux with /dev/hidraw needs no third-party packages.")
+
+
+def list_hidapi():
+    """Enumerate 8BitDo HID collections through hidapi (Windows, macOS, Linux)."""
+    out = []
+    for d in _hidlib().enumerate(VENDOR_ID):
+        # hidapi yields one entry per top-level collection: keep them all and let
+        # pick_device() choose with the site's usage-page table.
+        is_boot = d["product_id"] == 0x3208
+        out.append(dict(node=d["path"], pid=d["product_id"],
+                        name=d.get("product_string") or "",
+                        input_id=2,
+                        output_id=0 if is_boot else 0x81,
+                        desc=b"", usage=(d.get("usage_page"), d.get("usage"))))
+    return out
+
+
 def list_hidraw():
-    """Yield dicts describing every hidraw node belonging to an 8BitDo device."""
+    """Every 8BitDo HID interface, whatever the platform."""
+    if backend() == "hidapi":
+        return list_hidapi()
     out = []
     base = "/sys/class/hidraw"
     if not os.path.isdir(base):
@@ -202,7 +253,7 @@ def pick_device(pid=None):
     if not cand:
         raise SystemExit("No 8BitDo interface with an output report found")
     for d in cand:
-        d["usage"] = top_usage(d["desc"])
+        d["usage"] = d.get("usage") or top_usage(d["desc"])
     # 1. exact match against the site's HID filter table
     filters = [f for f in load_filters() if f.get("productId") == cand[0]["pid"]]
     for f in filters:
@@ -226,23 +277,61 @@ class Device:
         self.usb_pid = usb_pid
         self.out_id = out_id if out_id else 0
         self.timeout = timeout
-        try:
-            self.fd = os.open(path, os.O_RDWR)
-        except PermissionError:
-            raise SystemExit(
-                f"{path}: permission denied.\n"
-                "hidraw nodes are root-only by default, so a udev rule is needed\n"
-                "(MODE matters — the uaccess tag alone only grants an ACL for a\n"
-                "logged-in local seat, not for SSH/headless use):\n\n"
-                '  echo \'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="2dc8", '
-                'MODE="0666", TAG+="uaccess"\' \\\n'
-                "    | sudo tee /etc/udev/rules.d/99-8bitdo-hidraw.rules\n"
-                "  sudo udevadm control --reload-rules && "
-                "sudo udevadm trigger --subsystem-match=hidraw\n\n"
-                "or just run this command with sudo.")
+        self.backend = backend()
+        self.handle = None
+        if self.backend == "hidapi":
+            self._open_hidapi(path)
+        else:
+            try:
+                self.fd = os.open(path, os.O_RDWR)
+            except PermissionError:
+                raise SystemExit(
+                    f"{path}: permission denied.\n"
+                    "hidraw nodes are root-only by default, so a udev rule is needed\n"
+                    "(MODE matters — the uaccess tag alone only grants an ACL for a\n"
+                    "logged-in local seat, not for SSH/headless use):\n\n"
+                    '  echo \'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="2dc8", '
+                    'MODE="0666", TAG+="uaccess"\' \\\n'
+                    "    | sudo tee /etc/udev/rules.d/99-8bitdo-hidraw.rules\n"
+                    "  sudo udevadm control --reload-rules && "
+                    "sudo udevadm trigger --subsystem-match=hidraw\n\n"
+                    "or just run this command with sudo.")
         self.log = []
 
+    def _open_hidapi(self, path):
+        """Open a HID path through hidapi (Windows/macOS, and Linux on request)."""
+        if self.handle is not None:
+            try:
+                self.handle.close()
+            except Exception:
+                pass
+        try:
+            self.handle = _hidlib().device()
+            self.handle.open_path(path)
+            self.handle.set_nonblocking(0)   # read() honours its timeout argument
+        except Exception as e:
+            raise SystemExit(
+                f"cannot open {path!r} via hidapi: {e}\n"
+                "On Windows: quit Steam/Big Picture and any other program holding\n"
+                "the controller, then retry. HID devices do not need Zadig/WinUSB.")
+        self.path = path
+
+    def _open_path(self, path):
+        if self.backend == "hidapi":
+            self._open_hidapi(path)
+        else:
+            self.fd = os.open(path, os.O_RDWR)
+        self.path = path
+
     def close(self):
+        if self.backend == "hidapi":
+            if self.handle is not None:
+                try:
+                    self.handle.close()
+                except Exception:
+                    pass
+                self.handle = None
+            return
         try:
             os.close(self.fd)
         except OSError:
@@ -262,12 +351,11 @@ class Device:
                 time.sleep(0.15)
                 continue
             try:
-                self.fd = os.open(dev["node"], os.O_RDWR)
-            except OSError as e:
+                self._open_path(dev["node"])
+            except (OSError, SystemExit) as e:
                 last = e
                 time.sleep(0.15)
                 continue
-            self.path = dev["node"]
             return True
         raise IOError(f"device did not come back after reset ({last})")
 
@@ -283,9 +371,26 @@ class Device:
 
     def _write(self, payload):
         data = payload if self.out_id == 0 else bytes([self.out_id]) + payload
+        if self.backend == "hidapi":
+            # hidapi wants the exact report length: reports are 64 bytes.
+            if len(data) < 64:
+                data = data + bytes(64 - len(data))
+            h = self.handle
+            if h is None:
+                raise OSError("hidapi handle is closed")
+            n = h.write(data)
+            if n is not None and n < 0:
+                raise OSError("hidapi write failed")
+            return
         os.write(self.fd, data)
 
     def _read(self, timeout):
+        if self.backend == "hidapi":
+            h = self.handle
+            if h is None:
+                raise OSError("hidapi handle is closed")
+            data = h.read(128, max(1, int(timeout * 1000)))
+            return data or None
         end = time.time() + timeout
         while True:
             left = end - time.time()
@@ -407,15 +512,20 @@ def fmt_version(v):
 def cmd_list(args):
     prods = load_products()
     devs = list_hidraw()
+    print(f"# backend: {backend()}")
     if not devs:
         print("no 8BitDo HID devices found")
         return
     for d in devs:
+        node = d["node"]
+        if isinstance(node, (bytes, bytearray)):
+            node = node.decode("utf-8", "replace")
         p = prods.get(d["pid"], {})
-        print(f'{d["node"]:16} {VENDOR_ID:04x}:{d["pid"]:04x}  '
+        print(f'{VENDOR_ID:04x}:{d["pid"]:04x}  '
               f'{p.get("EnName", d["name"]):45} '
               f'in={d["input_id"] and hex(d["input_id"])} out='
               f'{d["output_id"] is not None and hex(d["output_id"])}')
+        print(f'    {node}')
 
 
 def read_pid_or_die(d):
@@ -705,6 +815,13 @@ def cmd_verify(args):
 
 def main(argv):
     import argparse
+    if os.name == "nt":
+        # Windows consoles are not UTF-8; the tables use box drawing and dashes.
+        try:
+            sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+            sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:  # noqa: BLE001
+            pass
     ap = argparse.ArgumentParser(description="8BitDo firmware updater (HID, no browser)")
     ap.add_argument("--pid", type=lambda s: int(s, 0), help="select device by USB pid")
     sub = ap.add_subparsers(dest="cmd", required=True)

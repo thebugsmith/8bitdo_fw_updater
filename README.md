@@ -1,12 +1,20 @@
-8bitdo-fw-update is a Python toolset for updating 8BitDo controllers on Linux.
+8bitdo-fw-update is a Python toolset for updating 8BitDo controllers from a
+terminal — Linux, Windows and macOS.
 
 | script | what it does |
 |---|---|
 | `8bitdo-fw.py` | talks the updater's HID protocol to the controller: list, info, verify, backup, update |
 | `8bitdo-download.py` | pulls official firmware `.dat` files from 8BitDo's public API |
 
-No third-party packages. Linux only as written (`/dev/hidraw*`); nothing but
-`python3` is required.
+| platform | transport | requirements |
+|---|---|---|
+| Linux | `/dev/hidraw*` | `python3` only |
+| Windows 10/11 | hidapi | `py -m pip install hidapi` |
+| macOS | hidapi | `python3 -m pip install hidapi` |
+
+The backend is picked automatically (`/sys/class/hidraw` ⇒ hidraw, otherwise
+hidapi). Force one with `8BITDO_BACKEND=hidraw` or `8BITDO_BACKEND=hidapi` —
+useful when testing the Windows path on a Linux box.
 
 
 Tested on:
@@ -19,7 +27,7 @@ Should work on 2C wired version as well. Other controller models have different 
 
 I will try to add support for other models in the future, but I don't have them to test on.
 
-## Permissions (the one prerequisite)
+## Permissions (Linux only)
 
 `/dev/hidraw*` is root-only by default, so a udev rule is needed exactly like
 for the browser updater:
@@ -35,6 +43,34 @@ headless box there is no ACL and the open still fails. The rule is per-vendor,
 so it covers every 8BitDo product. Replug the controller (or run the `trigger`
 above) after adding it; the script prints these instructions itself if it hits
 a permission error.
+
+## Windows / macOS
+
+No udev rule, no admin rights, no driver swap — the pad's vendor collection is a
+plain HID interface, so `hidapi` opens it directly. Do **not** run Zadig or bind
+WinUSB to it; that breaks the gamepad side.
+
+```powershell
+PS> py -m pip install hidapi
+PS> py .\8bitdo-fw.py list                 # backend: hidapi
+PS> py .\8bitdo-fw.py info
+PS> py .\8bitdo-fw.py update .\fw\Ultimate 2C_v1.09_75.dat -y
+```
+
+Two things bite on Windows:
+
+* **Something else may hold the pad.** Steam / Steam Input, DS4Windows, x360ce
+  and vendor utilities open HID devices exclusively. Quit them if `info` reports
+  no device or opening fails.
+* **The pad must be on the USB-C cable**, not the 2.4 GHz dongle — over the
+  dongle the tool sees the adapter (`0x301c`) and would flash the dongle.
+
+The update path resets the device and re-enumerates; on Windows that can take a
+second or two longer than on Linux. `tests/test_transport.py` runs the whole
+hidapi path (enumerate → pick → open → write → read → parse) against a fake HID
+device, so this code is exercised without hardware — but it has not yet been
+run on a real Windows host, so treat the first run as a test, keep the pad on a
+cable, and use `verify` afterwards.
 
 ## Usage
 
