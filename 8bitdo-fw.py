@@ -270,6 +270,77 @@ def pick_device(pid=None):
     return cand[0]
 
 
+def open_device(pid=None, timeout=3.0):
+    """Open the interface that actually speaks the firmware protocol.
+
+    With hidraw the report descriptor already identifies the vendor collection.
+    hidapi exposes no descriptor, and on Linux reports usage_page/usage 0/0 for
+    every collection, so the only portable test is to ask each interface for its
+    PID and keep the one that answers.
+    """
+    if backend() == "hidraw":
+        dev = pick_device(pid)
+        return Device(dev["node"], dev["output_id"], usb_pid=dev["pid"],
+                      timeout=timeout)
+    cands = []
+    for attempt in range(4):
+        cands = [d for d in list_hidapi() if pid is None or d["pid"] == pid]
+        if cands or attempt == 3:
+            break
+        time.sleep(1.0)   # the pad drops off the bus for a moment while rebooting
+    if not cands:
+        raise SystemExit(
+            f"No 8BitDo HID device{' with pid %#06x' % pid if pid else ''} found "
+            "(is the controller plugged in via USB?)")
+    prods = load_products()
+    last = None
+    fallback = None
+    # Right after a reset the pad enumerates before it answers; give it one
+    # more round before declaring failure.
+    for attempt in range(2):
+        fallback = None
+        got_answer, fallback, last = _probe(cands, prods)
+        if got_answer is not None:
+            return got_answer
+        if attempt == 0:
+            time.sleep(1.5)
+    if fallback is not None:
+        return fallback
+    if isinstance(last, SystemExit):
+        raise SystemExit(
+            f"{last}\n\nThe device is present on the bus but not accepting a "
+            "connection yet —\nit is usually still rebooting after a reset. "
+            "Retry in a second or two.")
+    raise SystemExit(f"no 8BitDo interface answered the PID query ({last})")
+
+
+def _probe(cands, prods):
+    """Try every candidate interface; return (device, fallback, last_error)."""
+    last = None
+    fallback = None
+    for d in cands:
+        try:
+            dev = Device(d["node"], d["output_id"], usb_pid=d["pid"], timeout=0.7)
+        except SystemExit as e:
+            last = e
+            continue
+        try:
+            answered = dev.read_pid()
+        except (TimeoutError, OSError, ValueError, struct.error) as e:
+            last = e
+            dev.close()
+            continue
+        # Any interface can hand back zeros; only a known product id counts as
+        # "this one speaks the protocol".
+        if answered and answered in prods:
+            return dev, fallback, last
+        if answered and answered != 0xFFFF and fallback is None:
+            fallback = dev
+        else:
+            dev.close()
+    return None, fallback, last
+
+
 # --- transport ----------------------------------------------------------------
 class Device:
     def __init__(self, path, out_id, in_id=None, timeout=3.0, usb_pid=None):
@@ -337,13 +408,29 @@ class Device:
         except OSError:
             pass
 
-    def reconnect(self, wait=8.0):
+    def reconnect(self, wait=None):
         """Re-open after a reset. Some receivers reboot mid-erase, which kills
         the old fd; the node may also come back under a different hidraw name."""
+        if wait is None:
+            # hidapi has to re-enumerate the whole device; Windows is slower still.
+            wait = 15.0 if self.backend == "hidapi" else 8.0
         self.close()
         end = time.time() + wait
         last = None
         while time.time() < end:
+            if self.backend == "hidapi":
+                # Interface numbering and paths can both change on re-plug, so
+                # probe again rather than reopening the old path.
+                try:
+                    other = open_device(self.usb_pid, timeout=0.7)
+                except SystemExit as e:
+                    last = e
+                    time.sleep(0.15)
+                    continue
+                self.handle = other.handle
+                other.handle = None      # ownership moves to self
+                self.path = other.path
+                return True
             try:
                 dev = pick_device(self.usb_pid)
             except SystemExit as e:
@@ -390,7 +477,9 @@ class Device:
             if h is None:
                 raise OSError("hidapi handle is closed")
             data = h.read(128, max(1, int(timeout * 1000)))
-            return data or None
+            if not data:
+                return None
+            return bytes(data) if not isinstance(data, bytes) else data
         end = time.time() + timeout
         while True:
             left = end - time.time()
@@ -414,13 +503,24 @@ class Device:
                          total_len, offset)
         p[17:17 + len(data)] = data
         self._write(bytes(p))
-        raw = self._read(self.timeout if timeout is None else timeout)
-        if raw is None:
-            raise TimeoutError(f"no response to cmd {cmd:#06x} (offset {offset:#x})")
-        body = raw[1:]  # drop report id
-        if len(body) < 17:
-            raise IOError(f"short response: {raw.hex()}")
-        status, echo, ln, _crc, total, off = struct.unpack_from("<HHHHII", body, 1)
+        deadline = time.time() + (self.timeout if timeout is None else timeout)
+        while True:
+            raw = self._read(max(0.05, deadline - time.time()))
+            if raw is None:
+                raise TimeoutError(
+                    f"no response to cmd {cmd:#06x} (offset {offset:#x})")
+            body = raw[1:]  # drop report id
+            if len(body) < 17:
+                raise IOError(f"short response: {raw.hex()}")
+            status, echo, ln, _crc, total, off = struct.unpack_from(
+                "<HHHHII", body, 1)
+            # A stale or unrelated report can arrive late; only the reply that
+            # echoes this command belongs to this request.
+            if echo == cmd:
+                break
+            if time.time() >= deadline:
+                raise IOError(
+                    f"desynced reply: expected echo {cmd:#06x}, got {echo:#06x}")
         if verbosity > 1:
             print(f"    [cmd {cmd:#06x} -> status {status} echo {echo:#06x} "
                   f"len {ln} total {total} off {off:#x}]")
@@ -592,9 +692,8 @@ def cmd_products(args):
 
 def cmd_info(args):
     prods = load_products()
-    dev = pick_device(args.pid)
-    refuse_if_boot_jump(dev["pid"])
-    d = Device(dev["node"], dev["output_id"], usb_pid=dev["pid"])
+    d = open_device(args.pid)
+    refuse_if_boot_jump(d.usb_pid)
     try:
         pid = read_pid_or_die(d)
         p = prods.get(pid, {})
@@ -602,8 +701,9 @@ def cmd_info(args):
             main, beta = d.read_version()
         except (TimeoutError, IOError):
             main = beta = None
-        print(f'interface : {dev["node"]} ({VENDOR_ID:04x}:{dev["pid"]:04x})')
-        print(f'usb pid   : {dev["pid"]:#06x}')
+        node = d.path.decode("utf-8", "replace") if isinstance(d.path, bytes) else d.path
+        print(f'interface : {node} ({VENDOR_ID:04x}:{d.usb_pid:04x})')
+        print(f'usb pid   : {(d.usb_pid or 0):#06x}')
         print(f'device pid: {pid:#06x}  ({p.get("EnName", "unknown product")})')
         print(f'fw type   : {p.get("type")}')
         if main is not None:
@@ -632,8 +732,7 @@ def infer_layout(pid):
 
 def cmd_backup(args):
     """Dump the application region. Reads use absolute flash addresses."""
-    dev = pick_device(args.pid)
-    d = Device(dev["node"], dev["output_id"], usb_pid=dev["pid"])
+    d = open_device(args.pid)
     try:
         pid = d.read_pid()
         addr, length = infer_layout(pid)
@@ -737,9 +836,8 @@ def resolve_firmware(args, dev_pid, product):
 
 def cmd_update(args):
     prods = load_products()
-    dev = pick_device(args.pid)
-    refuse_if_boot_jump(dev["pid"])
-    d = Device(dev["node"], dev["output_id"], usb_pid=dev["pid"])
+    d = open_device(args.pid)
+    refuse_if_boot_jump(d.usb_pid)
     try:
         pid = read_pid_or_die(d)
         p = prods.get(pid, {})
@@ -787,8 +885,7 @@ def cmd_update(args):
 
 def cmd_verify(args):
     """Compare a .dat against the device flash without writing anything."""
-    dev = pick_device(args.pid)
-    d = Device(dev["node"], dev["output_id"], usb_pid=dev["pid"])
+    d = open_device(args.pid)
     try:
         pid = d.read_pid()
         header, _ = parse_dat(open(args.file, "rb").read())

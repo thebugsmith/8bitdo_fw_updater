@@ -65,12 +65,23 @@ Two things bite on Windows:
 * **The pad must be on the USB-C cable**, not the 2.4 GHz dongle — over the
   dongle the tool sees the adapter (`0x301c`) and would flash the dongle.
 
-The update path resets the device and re-enumerates; on Windows that can take a
-second or two longer than on Linux. `tests/test_transport.py` runs the whole
-hidapi path (enumerate → pick → open → write → read → parse) against a fake HID
-device, so this code is exercised without hardware — but it has not yet been
-run on a real Windows host, so treat the first run as a test, keep the pad on a
-cable, and use `verify` afterwards.
+The update path resets the device and re-enumerates; right after a reset the pad
+drops off the bus for a second or two, so the tool retries enumeration before
+giving up. If it still reports "present on the bus but not accepting a connection
+yet", run the command again after a moment.
+
+The hidapi backend has been driven against real hardware on Linux — enumeration,
+`info`, full 74,752-byte `backup`, `verify`, and a complete erase/write/reset
+cycle — and both transports produce byte-identical dumps:
+
+```
+3b8af4fc75fc31a3…  dump via hidraw
+3b8af4fc75fc31a3…  dump via hidapi
+```
+
+It has not yet run on a real Windows host, where only the OS-level path handling
+differs. Treat the first Windows run as a test, keep the pad on the cable, and
+check with `verify` afterwards.
 
 ## Usage
 
