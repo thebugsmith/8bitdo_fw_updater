@@ -1,0 +1,1130 @@
+[
+ {
+  "Pid": 8294,
+  "Name": "Ultimate3C +",
+  "EnName": "Ultimate3C +",
+  "fileNameHead": "Ultimate3C +",
+  "type": 127,
+  "model": "81DA"
+ },
+ {
+  "Pid": 8316,
+  "Name": "SN30 Pro 2.4G",
+  "EnName": "SN30 Pro 2.4G",
+  "fileNameHead": "SN30_Pro_2.4G",
+  "type": 123,
+  "model": "81DA"
+ },
+ {
+  "Pid": 8313,
+  "Name": "SN30 Pro 2.4G_RR",
+  "EnName": "SN30 Pro 2.4G_RR",
+  "fileNameHead": "SN30_Pro_2.4G_RR",
+  "type": 124,
+  "model": "81DA"
+ },
+ {
+  "Pid": 24591,
+  "Name": "猎户座二代蓝牙手柄",
+  "EnName": "8BitDo Ultimate 2 Bluetooth Controller",
+  "fileNameHead": "Ultimate 2",
+  "type": 97,
+  "model": "80ND"
+ },
+ {
+  "Pid": 24593,
+  "Name": "猎户座二代蓝牙手柄接收器",
+  "EnName": "8BitDo Ultimate 2 Bluetooth Controller Adapter",
+  "fileNameHead": "Ultimate 2 Adapter",
+  "type": 98,
+  "model": "80ND"
+ },
+ {
+  "Pid": 24585,
+  "Name": "Pro 3 蓝牙手柄",
+  "EnName": "8BitDo Pro 3 Bluetooth Gamepad",
+  "fileNameHead": "Pro 3",
+  "type": 86,
+  "model": "80GQ"
+ },
+ {
+  "Pid": 24586,
+  "Name": "Pro 3 蓝牙手柄接收器",
+  "EnName": "8BitDo Pro 3 Bluetooth Gamepad Adapter",
+  "fileNameHead": "Pro 3 Adapter",
+  "type": 87,
+  "model": "80GQ"
+ },
+ {
+  "Pid": 24594,
+  "Name": "猎户座二代无线手柄",
+  "EnName": "8BitDo Ultimate 2 Wireless Controller",
+  "fileNameHead": "Ultimate 2 Wireless",
+  "type": 94,
+  "model": "81HE"
+ },
+ {
+  "Pid": 24595,
+  "Name": "猎户座二代无线手柄接收器",
+  "EnName": "8BitDo Ultimate 2 Wireless Controller Adapter",
+  "fileNameHead": "Ultimate 2 Wireless Adapter",
+  "type": 95,
+  "model": "81HE"
+ },
+ {
+  "Pid": 20754,
+  "Name": "Lite 2 蓝牙手柄",
+  "EnName": "8BitDo Lite 2 Bluetooth Gamepad",
+  "fileNameHead": "Lite 2",
+  "type": 47,
+  "model": "80KA"
+ },
+ {
+  "Pid": 12315,
+  "Name": "猎户座二代青春版无线手柄",
+  "EnName": "8BitDo Ultimate 2C Wireless Controller",
+  "fileNameHead": "Ultimate 2C wireless",
+  "type": 75,
+  "model": "81HD"
+ },
+ {
+  "Pid": 12316,
+  "Name": "猎户座二代青春版无线手柄接收器",
+  "EnName": "8BitDo Ultimate 2C Wireless Controller Adapter",
+  "fileNameHead": "Ultimate 2C Adapter",
+  "type": 76,
+  "model": "81HD"
+ },
+ {
+  "Pid": 12314,
+  "Name": "猎户座二代青春版蓝牙手柄",
+  "EnName": "8BitDo Ultimate 2C Bluetooth Gamepad",
+  "fileNameHead": "Ultimate 2C",
+  "type": 108,
+  "model": "80NC"
+ },
+ {
+  "Pid": 12317,
+  "Name": "猎户座二代青春版有线手柄",
+  "EnName": "8BitDo Ultimate 2C Wired Gamepad",
+  "fileNameHead": "Ultimate 2C Wired",
+  "type": 77,
+  "model": "82CD"
+ },
+ {
+  "Pid": 24577,
+  "Name": "SN30 Pro 蓝牙手柄",
+  "EnName": "8BitDo SN30 Pro Bluetooth Gamepad",
+  "fileNameHead": "SN30pro+SF30pro",
+  "type": 9,
+  "model": "80DM"
+ },
+ {
+  "Pid": 24576,
+  "Name": "SF30 Pro 蓝牙手柄",
+  "EnName": "8BitDo SF30 Pro Bluetooth Gamepad",
+  "fileNameHead": "SN30pro+SF30pro",
+  "type": 9,
+  "model": "80DB"
+ },
+ {
+  "Pid": 24587,
+  "Name": "街机控制器",
+  "EnName": "8BitDo Arcade Controller ",
+  "fileNameHead": "Hitbox",
+  "type": 101,
+  "model": "80FG"
+ },
+ {
+  "Pid": 24588,
+  "Name": "街机控制器接收器",
+  "EnName": "8BitDo Arcade Controller Adapter",
+  "fileNameHead": "Hitbox Adapter",
+  "type": 102,
+  "model": "80FG"
+ },
+ {
+  "Pid": 8232,
+  "Name": "Retro 87 机械键盘（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Retro 87 Keyboard X",
+  "type": 80,
+  "model": "85HD"
+ },
+ {
+  "Pid": 8238,
+  "Name": "Retro 87 机械键盘（Xbox）接收器",
+  "EnName": null,
+  "fileNameHead": "Retro 87 Keyboard X Adapter",
+  "type": 81,
+  "model": "85HD"
+ },
+ {
+  "Pid": 12326,
+  "Name": "Retro 87 机械键盘（Xbox-UK）",
+  "EnName": null,
+  "fileNameHead": "Retro 87 Keyboard X UK",
+  "type": 106,
+  "model": "85HD(UK)"
+ },
+ {
+  "Pid": 12327,
+  "Name": "Retro 87 机械键盘（Xbox-UK）接收器",
+  "EnName": null,
+  "fileNameHead": "Retro 87 Keyboard X UK Adapter",
+  "type": 107,
+  "model": "85HD(UK)"
+ },
+ {
+  "Pid": 12319,
+  "Name": "VITURE x 8BitDo 猎户座拉伸手柄",
+  "EnName": null,
+  "fileNameHead": "Ultimate MG for Viture",
+  "type": 105,
+  "model": "82EA"
+ },
+ {
+  "Pid": 8241,
+  "Name": "猎户座三模手柄（Xbox-Rare 40 周年纪念版）",
+  "EnName": null,
+  "fileNameHead": "Ultimate 3M for Rare",
+  "type": 104,
+  "model": "81HB-04"
+ },
+ {
+  "Pid": 36904,
+  "Name": "N64 蓝牙接收器",
+  "EnName": null,
+  "fileNameHead": "Ultimate N64 Adapter",
+  "type": 103,
+  "model": "83HA"
+ },
+ {
+  "Pid": 12318,
+  "Name": "猎户座拉伸手柄",
+  "EnName": null,
+  "fileNameHead": "Ultimate MG",
+  "type": 100,
+  "model": "80LB"
+ },
+ {
+  "Pid": 8204,
+  "Name": "猎户座拉伸手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate MGX",
+  "type": 79,
+  "model": "80LA01"
+ },
+ {
+  "Pid": 8203,
+  "Name": "猎户座拉伸手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate MGX",
+  "type": 79,
+  "model": "80LA02"
+ },
+ {
+  "Pid": 36907,
+  "Name": "土星蓝牙接收器",
+  "EnName": null,
+  "fileNameHead": "Saturn Adapter",
+  "type": 99,
+  "model": "83FB"
+ },
+ {
+  "Pid": 8216,
+  "Name": "猎户座迷你有线手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate Mini Wired for Xbox",
+  "type": 93,
+  "model": "82CC"
+ },
+ {
+  "Pid": 8217,
+  "Name": "猎户座迷你有线手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate Mini Wired for Xbox",
+  "type": 93,
+  "model": "82CC"
+ },
+ {
+  "Pid": 8218,
+  "Name": "猎户座迷你有线手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate Mini Wired for Xbox",
+  "type": 93,
+  "model": "82CC"
+ },
+ {
+  "Pid": 36906,
+  "Name": "NGC 蓝牙接收器",
+  "EnName": null,
+  "fileNameHead": "NGC Adapter",
+  "type": 92,
+  "model": "83GB"
+ },
+ {
+  "Pid": 10346,
+  "Name": "NGC 手柄蓝牙套件",
+  "EnName": null,
+  "fileNameHead": "NGC Modkit",
+  "type": 91,
+  "model": "86JA"
+ },
+ {
+  "Pid": 8236,
+  "Name": "街机控制器（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Hitbox for Xbox",
+  "type": 90,
+  "model": "81JB01"
+ },
+ {
+  "Pid": 8237,
+  "Name": "街机控制器（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Hitbox for Xbox",
+  "type": 90,
+  "model": "81JB02"
+ },
+ {
+  "Pid": 24589,
+  "Name": "Pro 3 底座",
+  "EnName": null,
+  "fileNameHead": "Pro 3 Dock",
+  "type": 89,
+  "model": "80GQ"
+ },
+ {
+  "Pid": 20992,
+  "Name": "复古机械键盘（UK）",
+  "EnName": null,
+  "fileNameHead": "Retro Keyboard UK",
+  "type": 88,
+  "model": "85HA"
+ },
+ {
+  "Pid": 20993,
+  "Name": "复古机械键盘（UK）接收器",
+  "EnName": null,
+  "fileNameHead": "Retro Keyboard Receiver",
+  "type": 62,
+  "model": "85HA"
+ },
+ {
+  "Pid": 20998,
+  "Name": "Retro R8 鼠标（Xbox）接收器",
+  "EnName": null,
+  "fileNameHead": "Retro Mouse Adapter",
+  "type": 85,
+  "model": "85CB"
+ },
+ {
+  "Pid": 8233,
+  "Name": "Retro R8 鼠标（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Retro Mouse",
+  "type": 84,
+  "model": null
+ },
+ {
+  "Pid": 21001,
+  "Name": "Retro 108 机械键盘",
+  "EnName": null,
+  "fileNameHead": "Retro Keyboard 108",
+  "type": 82,
+  "model": "85HC"
+ },
+ {
+  "Pid": 21002,
+  "Name": "Retro 108 机械键盘接收器",
+  "EnName": null,
+  "fileNameHead": "Retro Keyboard 108 Adapter",
+  "type": 83,
+  "model": "85HC"
+ },
+ {
+  "Pid": 8232,
+  "Name": "Retro 87 机械键盘（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Retro 87 Keyboard X",
+  "type": 80,
+  "model": "85HD"
+ },
+ {
+  "Pid": 8238,
+  "Name": "Retro 87 机械键盘（Xbox）接收器",
+  "EnName": null,
+  "fileNameHead": "Retro 87 Keyboard X Adapter",
+  "type": 81,
+  "model": "85HD"
+ },
+ {
+  "Pid": 12318,
+  "Name": "猎户座拉伸手柄",
+  "EnName": null,
+  "fileNameHead": "Ultimate MG",
+  "type": 100,
+  "model": "80LB"
+ },
+ {
+  "Pid": 12313,
+  "Name": "64 蓝牙手柄",
+  "EnName": "8BitDo 64 Bluetooth Controller",
+  "fileNameHead": "Ultimate N64",
+  "type": 78,
+  "model": "80NE"
+ },
+ {
+  "Pid": 20995,
+  "Name": "Retro 18 机械数字键盘",
+  "EnName": null,
+  "fileNameHead": "Retro Numpad",
+  "type": 73,
+  "model": "85HB"
+ },
+ {
+  "Pid": 20996,
+  "Name": "Retro 18 机械数字键盘接收器",
+  "EnName": null,
+  "fileNameHead": "Retro Numpad Adapter",
+  "type": 74,
+  "model": "85HB"
+ },
+ {
+  "Pid": 12292,
+  "Name": "64 2.4G 无线手柄",
+  "EnName": null,
+  "fileNameHead": "Ultimate C N64 2.4g",
+  "type": 71,
+  "model": "81HK"
+ },
+ {
+  "Pid": 12293,
+  "Name": "64 2.4G 无线手柄接收器",
+  "EnName": null,
+  "fileNameHead": "Ultimate C N64 2.4g Adapter",
+  "type": 72,
+  "model": "81CC"
+ },
+ {
+  "Pid": 8229,
+  "Name": "猎户座青春版有线手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate C Wired for Xbox",
+  "type": 70,
+  "model": "82CF05"
+ },
+ {
+  "Pid": 8220,
+  "Name": "猎户座青春版有线手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate C Wired for Xbox",
+  "type": 70,
+  "model": "82CF01"
+ },
+ {
+  "Pid": 8221,
+  "Name": "猎户座青春版有线手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate C Wired for Xbox",
+  "type": 70,
+  "model": "82CF02"
+ },
+ {
+  "Pid": 8230,
+  "Name": "猎户座青春版有线手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate C Wired for Xbox",
+  "type": 70,
+  "model": "82CF03"
+ },
+ {
+  "Pid": 8231,
+  "Name": "猎户座青春版有线手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate C Wired for Xbox",
+  "type": 70,
+  "model": "82CF04"
+ },
+ {
+  "Pid": 8235,
+  "Name": "猎户座青春版有线手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate C Wired for Xbox",
+  "type": 70,
+  "model": "82CF06"
+ },
+ {
+  "Pid": 8202,
+  "Name": "M30 有线手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "M30 Wired for Xbox",
+  "type": 69,
+  "model": "82DA"
+ },
+ {
+  "Pid": 8200,
+  "Name": "Lite SE 2.4G 无线手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Lite SE for Xbox",
+  "type": 68,
+  "model": "81KA"
+ },
+ {
+  "Pid": 8194,
+  "Name": "猎户座有线手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate Wired for Xbox",
+  "type": 67,
+  "model": "82CE"
+ },
+ {
+  "Pid": 8195,
+  "Name": "猎户座有线手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate Wired for Xbox",
+  "type": 67,
+  "model": "82CE"
+ },
+ {
+  "Pid": 8198,
+  "Name": "猎户座有线手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate Wired for Xbox",
+  "type": 67,
+  "model": "82CE"
+ },
+ {
+  "Pid": 8213,
+  "Name": "猎户座有线手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate Wired for Xbox",
+  "type": 67,
+  "model": "82CE"
+ },
+ {
+  "Pid": 8214,
+  "Name": "猎户座有线手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate Wired for Xbox",
+  "type": 67,
+  "model": "82CE"
+ },
+ {
+  "Pid": 8215,
+  "Name": "猎户座有线手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate Wired for Xbox",
+  "type": 67,
+  "model": "82CE"
+ },
+ {
+  "Pid": 12312,
+  "Name": "猎户座青春版蓝牙手柄",
+  "EnName": null,
+  "fileNameHead": "Ultimate C Bluetooth",
+  "type": 66,
+  "model": null
+ },
+ {
+  "Pid": 8222,
+  "Name": "Pro 2 有线手柄（Xbox-霍尔版）",
+  "EnName": null,
+  "fileNameHead": "Pro2 Wired for Xbox",
+  "type": 63,
+  "model": "82BB02"
+ },
+ {
+  "Pid": 8223,
+  "Name": "Pro 2 有线手柄（Xbox-霍尔版）",
+  "EnName": null,
+  "fileNameHead": "Pro2 Wired for Xbox",
+  "type": 63,
+  "model": "82BB03"
+ },
+ {
+  "Pid": 8224,
+  "Name": "Pro 2 有线手柄（Xbox-霍尔版）",
+  "EnName": null,
+  "fileNameHead": "Pro2 Wired for Xbox",
+  "type": 63,
+  "model": "82BB04"
+ },
+ {
+  "Pid": 8225,
+  "Name": "Pro 2 有线手柄（Xbox-霍尔版）",
+  "EnName": null,
+  "fileNameHead": "Pro2 Wired for Xbox",
+  "type": 63,
+  "model": "82BB05"
+ },
+ {
+  "Pid": 8207,
+  "Name": "猎户座三模手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate 3M",
+  "type": 64,
+  "model": "81HB"
+ },
+ {
+  "Pid": 8219,
+  "Name": "猎户座三模手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate 3M",
+  "type": 64,
+  "model": "81HB"
+ },
+ {
+  "Pid": 8208,
+  "Name": "猎户座三模手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate 3M",
+  "type": 64,
+  "model": "81HB"
+ },
+ {
+  "Pid": 36891,
+  "Name": "猎户座三模手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Ultimate 3M",
+  "type": 64,
+  "model": "81HB"
+ },
+ {
+  "Pid": 8207,
+  "Name": "猎户座三模手柄（Xbox）接收器",
+  "EnName": null,
+  "fileNameHead": "Ultimate 3M Receiver",
+  "type": 65,
+  "model": "81HB"
+ },
+ {
+  "Pid": 8219,
+  "Name": "猎户座三模手柄（Xbox）接收器",
+  "EnName": null,
+  "fileNameHead": "Ultimate 3M Receiver",
+  "type": 65,
+  "model": "81HB"
+ },
+ {
+  "Pid": 20992,
+  "Name": "复古机械键盘",
+  "EnName": null,
+  "fileNameHead": "Retro Keyboard",
+  "type": 61,
+  "model": "85HA"
+ },
+ {
+  "Pid": 20993,
+  "Name": "复古机械键盘接收器",
+  "EnName": null,
+  "fileNameHead": "Retro Keyboard Receiver",
+  "type": 62,
+  "model": "85HA"
+ },
+ {
+  "Pid": 36896,
+  "Name": "Micro 蓝牙手柄",
+  "EnName": null,
+  "fileNameHead": "Micro",
+  "type": 60,
+  "model": "80EL"
+ },
+ {
+  "Pid": 36897,
+  "Name": "Micro 蓝牙手柄",
+  "EnName": null,
+  "fileNameHead": "Micro",
+  "type": 60,
+  "model": "80EL"
+ },
+ {
+  "Pid": 36905,
+  "Name": "PS 蓝牙接收器",
+  "EnName": null,
+  "fileNameHead": "Retro Receiver for PS",
+  "type": 59,
+  "model": null
+ },
+ {
+  "Pid": 36901,
+  "Name": "NEOGEO 无线手柄",
+  "EnName": null,
+  "fileNameHead": "NEOGEO",
+  "type": 57,
+  "model": "80HC"
+ },
+ {
+  "Pid": 36902,
+  "Name": "NEOGEO 无线手柄接收器",
+  "EnName": null,
+  "fileNameHead": "NEOGEO Receiver",
+  "type": 58,
+  "model": "80HC"
+ },
+ {
+  "Pid": 36899,
+  "Name": "Star云手柄",
+  "EnName": null,
+  "fileNameHead": "Ultimate 2.4g START",
+  "type": 54,
+  "model": null
+ },
+ {
+  "Pid": 36900,
+  "Name": "Star云手柄",
+  "EnName": null,
+  "fileNameHead": "Ultimate 2.4g START",
+  "type": 54,
+  "model": null
+ },
+ {
+  "Pid": 36899,
+  "Name": "Star云手柄接收器",
+  "EnName": null,
+  "fileNameHead": "Ultimate 2.4g Receiver START",
+  "type": 55,
+  "model": null
+ },
+ {
+  "Pid": 36900,
+  "Name": "Star云手柄接收器",
+  "EnName": null,
+  "fileNameHead": "Ultimate 2.4g Receiver START",
+  "type": 55,
+  "model": null
+ },
+ {
+  "Pid": 10345,
+  "Name": "N64 手柄蓝牙套件",
+  "EnName": null,
+  "fileNameHead": "N64 Modkit",
+  "type": 53,
+  "model": "86HA"
+ },
+ {
+  "Pid": 8210,
+  "Name": "街机摇杆（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Arcade Stick for Xbox",
+  "type": 51,
+  "model": null
+ },
+ {
+  "Pid": 8211,
+  "Name": "街机摇杆（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Arcade Stick for Xbox",
+  "type": 51,
+  "model": null
+ },
+ {
+  "Pid": 8199,
+  "Name": "街机摇杆（Xbox）接收器",
+  "EnName": null,
+  "fileNameHead": "Arcade Stick 2.4g Receiver for Xbox",
+  "type": 52,
+  "model": "81JA"
+ },
+ {
+  "Pid": 8197,
+  "Name": "街机摇杆（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Arcade Stick for Xbox",
+  "type": 51,
+  "model": "81JA"
+ },
+ {
+  "Pid": 8196,
+  "Name": "街机摇杆（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Arcade Stick for Xbox",
+  "type": 51,
+  "model": "81JA"
+ },
+ {
+  "Pid": 12311,
+  "Name": "猎户座青春版有线手柄",
+  "EnName": null,
+  "fileNameHead": "Ultimate C Wired",
+  "type": 50,
+  "model": "82CB"
+ },
+ {
+  "Pid": 12309,
+  "Name": "猎户座青春版无线手柄",
+  "EnName": null,
+  "fileNameHead": "Ultimate C 2.4g",
+  "type": 48,
+  "model": "81HC"
+ },
+ {
+  "Pid": 12310,
+  "Name": "猎户座青春版无线手柄接收器",
+  "EnName": null,
+  "fileNameHead": "UUltimate C 2.4g Adapter",
+  "type": 49,
+  "model": "81HC"
+ },
+ {
+  "Pid": 36898,
+  "Name": "Lite SE 蓝牙手柄",
+  "EnName": null,
+  "fileNameHead": "Lite SE",
+  "type": 46,
+  "model": null
+ },
+ {
+  "Pid": 12305,
+  "Name": "猎户座有线手柄",
+  "EnName": null,
+  "fileNameHead": "Ultimate Wired",
+  "type": 45,
+  "model": null
+ },
+ {
+  "Pid": 12306,
+  "Name": "猎户座 2.4G 无线手柄",
+  "EnName": null,
+  "fileNameHead": "Ultimate 2.4g",
+  "type": 43,
+  "model": "81HA"
+ },
+ {
+  "Pid": 12307,
+  "Name": "猎户座 2.4G 无线手柄",
+  "EnName": null,
+  "fileNameHead": "Ultimate 2.4g",
+  "type": 43,
+  "model": "81HA"
+ },
+ {
+  "Pid": 24583,
+  "Name": "猎户座蓝牙手柄",
+  "EnName": null,
+  "fileNameHead": "Ultimate",
+  "type": 41,
+  "model": "80NA"
+ },
+ {
+  "Pid": 24584,
+  "Name": "猎户座蓝牙手柄接收器",
+  "EnName": null,
+  "fileNameHead": "Ultimate Adapter",
+  "type": 42,
+  "model": "80NA"
+ },
+ {
+  "Pid": 8227,
+  "Name": "猎户座有线手柄（Xbox-霍尔版）",
+  "EnName": null,
+  "fileNameHead": "Ultimate Wired for Xbox",
+  "type": 67,
+  "model": null
+ },
+ {
+  "Pid": 12549,
+  "Name": "USB 无线接收器二代",
+  "EnName": null,
+  "fileNameHead": "USB Adapter 2",
+  "type": 39,
+  "model": null
+ },
+ {
+  "Pid": 12551,
+  "Name": "USB 无线接收器二代",
+  "EnName": null,
+  "fileNameHead": "USB Adapter 2",
+  "type": 39,
+  "model": null
+ },
+ {
+  "Pid": 12297,
+  "Name": "Pro 2 有线手柄",
+  "EnName": null,
+  "fileNameHead": "Pro2 Wired",
+  "type": 37,
+  "model": null
+ },
+ {
+  "Pid": 12304,
+  "Name": "Pro 2 有线手柄",
+  "EnName": null,
+  "fileNameHead": "Pro2 Wired",
+  "type": 37,
+  "model": null
+ },
+ {
+  "Pid": 8192,
+  "Name": "Pro 2 有线手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Pro2 Wired for Xbox",
+  "type": 36,
+  "model": "82BB"
+ },
+ {
+  "Pid": 8212,
+  "Name": "Pro 2 有线手柄（Xbox）",
+  "EnName": null,
+  "fileNameHead": "Pro2 Wired for Xbox",
+  "type": 36,
+  "model": "82BB"
+ },
+ {
+  "Pid": 36890,
+  "Name": "N30 精英摇杆",
+  "EnName": null,
+  "fileNameHead": "Arcade Stick",
+  "type": 34,
+  "model": null
+ },
+ {
+  "Pid": 12807,
+  "Name": "N30 精英摇杆接收器",
+  "EnName": null,
+  "fileNameHead": "Arcade Stick 2.4g Receiver",
+  "type": 35,
+  "model": null
+ },
+ {
+  "Pid": 24579,
+  "Name": "Pro 2 蓝牙手柄",
+  "EnName": null,
+  "fileNameHead": "Pro 2",
+  "type": 33,
+  "model": "80GE"
+ },
+ {
+  "Pid": 12295,
+  "Name": "Symphony Arcade",
+  "EnName": null,
+  "fileNameHead": "Symphony Arcade",
+  "type": 32,
+  "model": null
+ },
+ {
+  "Pid": 8448,
+  "Name": "SN30 Pro 蓝牙手柄（安卓版）",
+  "EnName": null,
+  "fileNameHead": "SN30 Pro for Android",
+  "type": 31,
+  "model": null
+ },
+ {
+  "Pid": 36888,
+  "Name": "Zero 2 蓝牙手柄",
+  "EnName": null,
+  "fileNameHead": "Zero 2 gamepad",
+  "type": 30,
+  "model": "80EC"
+ },
+ {
+  "Pid": 36889,
+  "Name": "Lite 蓝牙手柄",
+  "EnName": null,
+  "fileNameHead": "Lite gamepad",
+  "type": 28,
+  "model": "80JA"
+ },
+ {
+  "Pid": 20485,
+  "Name": "Saturn 手柄蓝牙套件",
+  "EnName": null,
+  "fileNameHead": "S30 Modkit",
+  "type": 27,
+  "model": null
+ },
+ {
+  "Pid": 20489,
+  "Name": "Dogbone 手柄蓝牙套件",
+  "EnName": null,
+  "fileNameHead": "Dogbone Modkit",
+  "type": 26,
+  "model": "86GA"
+ },
+ {
+  "Pid": 24578,
+  "Name": "SN30 Pro+ 蓝牙手柄",
+  "EnName": null,
+  "fileNameHead": "SN30 Pro+",
+  "type": 25,
+  "model": "80GA"
+ },
+ {
+  "Pid": 20486,
+  "Name": "M30 蓝牙手柄",
+  "EnName": null,
+  "fileNameHead": "M30",
+  "type": 23,
+  "model": "80HA"
+ },
+ {
+  "Pid": 20487,
+  "Name": "PS 手柄蓝牙套件",
+  "EnName": null,
+  "fileNameHead": "P30 Modkit",
+  "type": 24,
+  "model": "86FA"
+ },
+ {
+  "Pid": 12547,
+  "Name": "Mega Drive/Genesis 蓝牙接收器",
+  "EnName": null,
+  "fileNameHead": "Retro Receiver for MD/Genesis",
+  "type": 22,
+  "model": "83FA"
+ },
+ {
+  "Pid": 12548,
+  "Name": "USB 无线接收器（PS Classic 版）",
+  "EnName": null,
+  "fileNameHead": "USB Adapter for PS classic",
+  "type": 21,
+  "model": "83DB"
+ },
+ {
+  "Pid": 36887,
+  "Name": "GBros 转接器",
+  "EnName": null,
+  "fileNameHead": "GBros. Adapter",
+  "type": 20,
+  "model": "83GA"
+ },
+ {
+  "Pid": 43794,
+  "Name": "N30 NS 蓝牙手柄",
+  "EnName": null,
+  "fileNameHead": "N30 NS",
+  "type": 18,
+  "model": "80AB"
+ },
+ {
+  "Pid": 36882,
+  "Name": "SN30 蓝牙手柄",
+  "EnName": null,
+  "fileNameHead": "SN30 V2",
+  "type": 17,
+  "model": "80BH"
+ },
+ {
+  "Pid": 20483,
+  "Name": "SNES 手柄蓝牙套件",
+  "EnName": null,
+  "fileNameHead": "SN30 V2",
+  "type": 16,
+  "model": "86CA"
+ },
+ {
+  "Pid": 20484,
+  "Name": "NES 手柄蓝牙套件",
+  "EnName": null,
+  "fileNameHead": "N30 Modkit",
+  "type": 15,
+  "model": "86DA"
+ },
+ {
+  "Pid": 20481,
+  "Name": "MD 手柄蓝牙套件",
+  "EnName": null,
+  "fileNameHead": "M30 Modkit",
+  "type": 14,
+  "model": "86BA"
+ },
+ {
+  "Pid": 36866,
+  "Name": "N64 蓝牙手柄",
+  "EnName": null,
+  "fileNameHead": "N64",
+  "type": 10,
+  "model": null
+ },
+ {
+  "Pid": 12544,
+  "Name": "USB 无线接收器",
+  "EnName": null,
+  "fileNameHead": "USB Adapter",
+  "type": 8,
+  "model": "83DA"
+ },
+ {
+  "Pid": 4099,
+  "Name": "N30 蓝牙街机摇杆",
+  "EnName": null,
+  "fileNameHead": "N30 ArcadeStick",
+  "type": 4,
+  "model": null
+ },
+ {
+  "Pid": 24577,
+  "Name": "SN30 Pro 蓝牙手柄",
+  "EnName": null,
+  "fileNameHead": "SN30pro+SF30pro",
+  "type": 9,
+  "model": "80DA"
+ },
+ {
+  "Pid": 12296,
+  "Name": "USB 2.4G RR",
+  "EnName": null,
+  "fileNameHead": "SN30pro+SF30pro",
+  "type": 9,
+  "model": null
+ },
+ {
+  "Pid": 12294,
+  "Name": "SN30 Plus Wireless",
+  "EnName": null,
+  "fileNameHead": "SN30pro+SF30pro",
+  "type": 9,
+  "model": "82AA"
+ },
+ {
+  "Pid": 43793,
+  "Name": "F30 蓝牙手柄",
+  "EnName": null,
+  "fileNameHead": "N30+F30",
+  "type": 2,
+  "model": "80AC"
+ },
+ {
+  "Pid": 36864,
+  "Name": "F30 Pro 蓝牙手柄",
+  "EnName": null,
+  "fileNameHead": "N30pro+F30pro",
+  "type": 1,
+  "model": "80CB"
+ },
+ {
+  "Pid": 36865,
+  "Name": "N30 Pro 蓝牙手柄",
+  "EnName": null,
+  "fileNameHead": "N30pro+F30pro",
+  "type": 1,
+  "model": "80CA"
+ },
+ {
+  "Pid": 12545,
+  "Name": "NES 蓝牙接收器",
+  "EnName": null,
+  "fileNameHead": "Retro Receiver for NES/SFC",
+  "type": 7,
+  "model": "83AA"
+ },
+ {
+  "Pid": 12546,
+  "Name": "NES/SNES/SFC 经典蓝牙接收器",
+  "EnName": null,
+  "fileNameHead": "Retro Receiver for Classic",
+  "type": 6,
+  "model": "停产"
+ },
+ {
+  "Pid": 36885,
+  "Name": "N30 Pro 2 蓝牙手柄",
+  "EnName": null,
+  "fileNameHead": "N30pro+N30 Pro 2",
+  "type": 13,
+  "model": "80CI"
+ }
+]

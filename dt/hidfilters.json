@@ -1,0 +1,130 @@
+[
+{
+"vendorId": 11720,
+"productId": 1476
+},
+{
+"vendorId": 11720,
+"productId": 12314,
+"UsagePage": 1,
+"Usage": 5
+},
+{
+"vendorId": 11720,
+"productId": 12316,
+"UsagePage": 65440,
+"Usage": 1
+},
+{
+"vendorId": 11720,
+"productId": 12553,
+"UsagePage": 140,
+"Usage": 1
+},
+{
+"vendorId": 11720,
+"productId": 12554,
+"UsagePage": 65402,
+"Usage": 1
+},
+{
+"vendorId": 11720,
+"productId": 12555,
+"UsagePage": 65402,
+"Usage": 1
+},
+{
+"vendorId": 11720,
+"productId": 12555,
+"UsagePage": 65403,
+"Usage": 1
+},
+{
+"vendorId": 11720,
+"productId": 12808
+},
+{
+"vendorId": 11720,
+"productId": 20754,
+"UsagePage": 1,
+"Usage": 5
+},
+{
+"vendorId": 11720,
+"productId": 22352
+},
+{
+"vendorId": 11720,
+"productId": 24585,
+"UsagePage": 1,
+"Usage": 5
+},
+{
+"vendorId": 11720,
+"productId": 24591,
+"UsagePage": 1,
+"Usage": 5
+},
+{
+"vendorId": 11720,
+"productId": 24595,
+"UsagePage": 65440,
+"Usage": 1
+},
+{
+"vendorId": 11720,
+"productId": 24586,
+"UsagePage": 1,
+"Usage": 5
+},
+{
+"vendorId": 11720,
+"productId": 12313,
+"UsagePage": 1,
+"Usage": 5
+},
+{
+"vendorId": 11720,
+"productId": 24577,
+"UsagePage": 1,
+"Usage": 5
+},
+{
+"vendorId": 11720,
+"productId": 24576,
+"UsagePage": 1,
+"Usage": 5
+},
+{
+"vendorId": 11720,
+"productId": 8315
+},
+{
+"vendorId": 11720,
+"productId": 8312
+},
+{
+"vendorId": 11720,
+"productId": 8316,
+"UsagePage": 65440,
+"Usage": 1
+},
+{
+"vendorId": 11720,
+"productId": 8314,
+"UsagePage": 65440,
+"Usage": 1
+},
+{
+"vendorId": 11720,
+"productId": 8313,
+"UsagePage": 65440,
+"Usage": 1
+},
+{
+"vendorId": 11720,
+"productId": 8294,
+"UsagePage": 65440,
+"Usage": 1
+}
+]
