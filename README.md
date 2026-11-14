@@ -1,226 +1,167 @@
-8bitdo-fw-update is a Python toolset for updating 8BitDo controllers from a
-terminal — Linux, Windows and macOS.
+# 8BitDo firmware CLI
 
-| script | what it does |
+An independent Python CLI for the firmware-update workflows at <https://web.8bitdo.com/>. 
+
+List official versions, download firmware, and update controllers or receivers using official or compatible custom `.dat` files. Not affiliated with 8BitDo.
+
+**Tested models:** `ultimate2c-wireless` (type 75) and `ultimate2c-wireless-receiver` (type 76) on linux. Other implemented models remain untested; catalog-only models cannot be flashed. See [SUPPORT.md](SUPPORT.md) for model-specific limitations.
+
+If you want to try out the this tool on untested models, please report your results to the issue tracker. 
+
+## Install
+
+Python 3.10+ is required. Extract or clone this folder.
+```
+git clone https://github.com/thebugsmith/8bitdo_fw_updater.git
+cd 8bitdo_fw_updater
+```
+
+| OS | Install | Run |
+|---|---|---|
+| Linux / macOS | `python3 install.py` | `sh ./eightbitdo models` |
+| Windows | `py -3 install.py` | `.\eightbitdo.cmd models` |
+
+The installer creates a local `.venv` and installs `hidapi`. It does not change system Python, USB drivers, or permissions. This is a firmware-only tool: the gamepad tester and its dependencies have been removed.
+
+Alternatively, activate your own virtualenv and run:
+
+```sh
+python -m pip install -r requirements.txt
+python eightbitdo.py --help
+```
+
+[PLATFORMS.md](PLATFORMS.md) covers Windows/macOS setup and troubleshooting.
+
+### Linux permissions
+
+For the active local desktop user:
+
+```sh
+python eightbitdo.py udev | sudo tee /etc/udev/rules.d/70-eightbitdo.rules >/dev/null
+sudo udevadm control --reload-rules
+sudo udevadm trigger --subsystem-match=hidraw
+```
+
+Reconnect the USB device. SSH/headless sessions need an administrator-managed group rule and group membership; the `uaccess` desktop rule alone does not grant headless access. Do not run the entire updater as root merely to work around permissions.
+
+## Discover devices and models
+
+```sh
+python eightbitdo.py models
+python eightbitdo.py devices
+python eightbitdo.py info
+python eightbitdo.py doctor
+```
+
+`models` is a compact table: model slug, firmware type, PID, and `tested` / `untested` / `unsupported`. Connection instructions live in `guide`, not under every table row.
+
+`devices` shows native HID paths and identifies the updater interface. On Linux these are real `/dev/hidrawN` paths, using HIDAPI's hidraw backend rather than libusb's opaque paths. Keyboard/gamepad collections belonging to the same controller are labelled as non-updater interfaces.
+
+`info` automatically selects the updater if exactly one exists. Select an interface explicitly when needed:
+
+```sh
+python eightbitdo.py info --path /dev/hidraw2
+python eightbitdo.py info --device YOUR_DEVICE_ID
+```
+
+Paths and device IDs can change after reconnection. Use the values from `devices`; `/dev/hidraw2` is only an example. `devices --json` and `info --json` provide structured output. Neither `devices` nor `doctor` opens hardware; `info` sends read-only identity/version queries.
+
+equence.
+
+## Local/custom firmware
+
+```sh
+python eightbitdo.py inspect custom.dat
+python eightbitdo.py plan --model ultimate2c-wireless custom.dat
+python eightbitdo.py flash --model ultimate2c-wireless custom.dat
+python eightbitdo.py flash --model ultimate2c-wireless --yes custom.dat
+```
+
+Only the final command permits hardware writes. `flash` works offline and accepts a model-compatible `.dat` container; it does not require official hashes or an official version. A raw `.bin` cannot simply be renamed to `.dat`. Container and target checks do not prove patched machine code will boot.
+
+`extract custom.dat --directory extracted` copies section payloads without decrypting or modifying them. `--trace flash.jsonl` on flash/update records raw USB traffic, including firmware bytes and potentially device identifiers. Do not publish traces without reviewing them.
+
+The updater stops on invalid acknowledgements and does not blindly replay erase/write commands. A successful transfer still needs a reconnect, `info`, and a physical controls check. Keep a known-good stock image and the correct recovery instructions available. Never disconnect during flashing.
+
+## Official firmware
+
+```sh
+python eightbitdo.py versions --model ultimate2c-wireless
+python eightbitdo.py versions --model ultimate2c-wireless --beta
+python eightbitdo.py download --model ultimate2c-wireless --version 1.09
+python eightbitdo.py update --model ultimate2c-wireless
+```
+It will be downloaded to the firmware as:
+
+```text
+firmware/ultimate2c-wireless-v109.dat
+firmware/ultimate2-wireless-v110.dat
+```
+
+The name uses the model slug and the selected version with dots removed. `--output` overrides the entire destination; a relative override is relative to your current working directory:
+
+```sh
+python eightbitdo.py download --model ultimate2c-wireless --output my-firmware.dat
+python eightbitdo.py update --model ultimate2c-wireless --output /path/to/stock.dat
+```
+
+`update` without `--yes` downloads and displays the plan for the connected device; it does not open the USB interface. To actually install:
+
+```sh
+python eightbitdo.py update --model ultimate2c-wireless --yes
+```
+
+Omitting `--version` selects the first eligible official release. Use `--beta` to include beta entries. If a version is ambiguous, choose the exact `--key` from `versions`. An older available version permits a downgrade, subject to device restrictions. Controller and receiver files are different: use the `-receiver` model when updating a receiver.
+
+### Catalog and network behaviour
+
+```sh
+python eightbitdo.py catalog
+python eightbitdo.py catalog --receivers
+```
+
+The second command needs one detail request per product family. It deduplicates families and runs up to four requests concurrently, with immediate progress on **stderr**; stdout remains valid JSON. It fetches live data rather than serving a stale cache. Slow servers or retries can still delay completion.
+
+API and file requests send browser-style User-Agent, Accept, Accept-Language, Origin and Referer headers. TCP connection attempts and TLS handshakes use a five-second maximum timeout; reads use twenty seconds, with up to two retries for transient failures. An unresponsive Cloudflare address was observed delaying sequential connections; the separate connect timeout limits that wait without pinning an IP or disabling TLS.
+
+**Download hash checks are disabled.** Stale catalog hashes are ignored, without mismatch warnings. `--strict-md5` and `--sha256` are not options. Printed local SHA-256 values are informational only. HTTPS verification, file-size limits, container structure, model/PID and destination checks remain, as do the USB protocol's CRCs and device-side firmware checksums.
+
+## App mode versus boot mode
+
+- **app**: normal controller firmware over a USB cable, Bluetooth mode, or XInput/DInput selection.
+- **boot**: bootloader/recovery firmware-update interface.
+- `flash` and `update` detect the connected mode. Required boot transitions happen only after `--yes`.
+- `plan --mode auto` chooses the model/host default without opening USB. `--mode app` or `--mode boot` changes only the offline plan; it does not switch hardware.
+
+| Family | Normal connection |
 |---|---|
-| `8bitdo-fw.py` | talks the updater's HID protocol to the controller: list, info, verify, backup, update |
-| `8bitdo-download.py` | pulls official firmware `.dat` files from 8BitDo's public API |
+| Ultimate 2C Wireless and its receiver | **app**; connect the controller directly by USB to update the controller. |
+| Ultimate 2 Wireless and receiver; 64 controller | **app**; boot is for an already-entered recovery/update interface. |
+| Pro 3 controller | **app**; both firmware sections are handled. |
+| Ultimate 2 Bluetooth controller | **app** on Linux/Windows; enter **boot first on macOS**. |
+| Lite 2, Ultimate 2C Bluetooth, Arcade controller/receiver, Pro 3 receiver, Ultimate 2 Bluetooth receiver | Start in app where available; the updater switches to boot for transfer. |
+| SN30/SF30 Pro | Boot transfer; PID-zero stock images require the legacy `5750` bootloader. |
+| Ultimate 2C Wired | Route implemented, real USB identity unverified. Metadata `301D` is not an accepted USB filter; sampled firmware uses `301B`. |
 
-| platform | transport | requirements |
-|---|---|---|
-| Linux | `/dev/hidraw*` | `python3` only |
-| Windows 10/11 | hidapi | `py -m pip install hidapi` |
-| macOS | hidapi | `python3 -m pip install hidapi` |
-
-The backend is picked automatically (`/sys/class/hidraw` ⇒ hidraw, otherwise
-hidapi). Force one with `8BITDO_BACKEND=hidraw` or `8BITDO_BACKEND=hidapi` —
-useful when testing the Windows path on a Linux box.
-
-
-Tested on:
-
-* **8BitDo Ultimate 2C Wireless Controller**, 1.06 → 1.09
-* **8BitDo Ultimate 2C Wireless Controller Adapter** (`0x301c`), 1.03 full
-  erase/write rewrite, verified block-by-block
-
-Should work on 2C wired version as well. Other controller models have different flow of updating the firmware, so it won't work on them. Downloading firmware for other models is possible regardless.
-
-I will try to add support for other models in the future, but I don't have them to test on.
-
-## Permissions (Linux only)
-
-`/dev/hidraw*` is root-only by default, so a udev rule is needed exactly like
-for the browser updater:
-
-```console
-$ sudo cp dt/99-8bitdo-hidraw.rules /etc/udev/rules.d/
-$ sudo udevadm control --reload-rules && sudo udevadm trigger --subsystem-match=hidraw
+```sh
+python eightbitdo.py guide --model ultimate2c-wireless
+python eightbitdo.py guide --model ultimate2c-wireless --boot
 ```
 
-`MODE` is the part that does the work. `TAG+="uaccess"` only attaches a
-systemd-logind ACL, which exists for a logged-in local seat — over SSH or on a
-headless box there is no ACL and the open still fails. The rule is per-vendor,
-so it covers every 8BitDo product. Replug the controller (or run the `trigger`
-above) after adding it; the script prints these instructions itself if it hits
-a permission error.
+Guides use the host platform automatically; override with `--platform linux`, `windows`, or `macos`. Recovery button combinations are model-specific. If the API has no recovery instructions, consult the model's manual-do not borrow a different controller's s
 
-## Windows / macOS
+## Tests and publication
 
-No udev rule, no admin rights, no driver swap — the pad's vendor collection is a
-plain HID interface, so `hidapi` opens it directly. Do **not** run Zadig or bind
-WinUSB to it; that breaks the gamepad side.
-
-```powershell
-PS> py -m pip install hidapi
-PS> py .\8bitdo-fw.py list                 # backend: hidapi
-PS> py .\8bitdo-fw.py info
-PS> py .\8bitdo-fw.py update .\fw\Ultimate 2C_v1.09_75.dat -y
+```sh
+python -m unittest discover -s tests -v
 ```
 
-Two things bite on Windows:
+Tests include 22 complete packet sequences compared with the inspected website routines, malformed firmware, target checks, failure handling, platform adapters, catalog concurrency, download naming and overwrite prompts. The two tested model labels are based on user reports. Automated live checks exercised the type-75 controller's identity/version and readback; they did not perform erase/write operations. Other models and native Windows/macOS hardware paths remain unverified here.
 
-* **Something else may hold the pad.** Steam / Steam Input, DS4Windows, x360ce
-  and vendor utilities open HID devices exclusively. Quit them if `info` reports
-  no device or opening fails.
-* **The pad must be on the USB-C cable**, not the 2.4 GHz dongle — over the
-  dongle the tool sees the adapter (`0x301c`) and would flash the dongle.
+The CI configuration is provided in `.github/workflows/tests.yml`; local success is not a claim that GitHub Actions has run. See [GITHUB_FILES.md](GITHUB_FILES.md) for the exact publication file list and exclusions. No official firmware or vendor JavaScript bundles should be committed.
 
-The update path resets the device and re-enumerates; right after a reset the pad
-drops off the bus for a second or two, so the tool retries enumeration before
-giving up. If it still reports "present on the bus but not accepting a connection
-yet", run the command again after a moment.
+[PROTOCOL.md](PROTOCOL.md), [SOURCE_MANIFEST.json](SOURCE_MANIFEST.json), and [REA_ANALYSIS.json](REA_ANALYSIS.json) retain protocol/source provenance. These are developer references, not runtime dependencies.
 
-The hidapi backend has been driven against real hardware on Linux — enumeration,
-`info`, full 74,752-byte `backup`, `verify`, and a complete erase/write/reset
-cycle — and both transports produce byte-identical dumps:
+## Licence and provenance
 
-```
-3b8af4fc75fc31a3…  dump via hidraw
-3b8af4fc75fc31a3…  dump via hidapi
-```
-
-It has not yet run on a real Windows host, where only the OS-level path handling
-differs. Treat the first Windows run as a test, keep the pad on the cable, and
-check with `verify` afterwards.
-
-## Usage
-
-```console
-$ ./8bitdo-fw.py list
-/dev/hidraw1  2dc8:310a  8BitDo Ultimate 2C Wireless Controller  in=0x1  out=0x1
-/dev/hidraw2  2dc8:310a  8BitDo Ultimate 2C Wireless Controller  in=0x2  out=0x81
-
-$ ./8bitdo-fw.py info
-interface : /dev/hidraw2 (2dc8:310a)
-usb pid   : 0x310a
-device pid: 0x301b  (8BitDo Ultimate 2C Wireless Controller)
-fw type   : 75
-firmware  : 1.09 (raw 109)
-
-$ ./8bitdo-fw.py update            # fetch latest for this device and flash it
-$ ./8bitdo-fw.py update file.dat    # flash a specific file
-$ ./8bitdo-fw.py verify file.dat    # compare a file against the device, read-only
-$ ./8bitdo-fw.py backup dump.bin   # dump application flash (read-only)
-```
-
-## Downloading firmware
-
-`firmware_type` is a per-product number; `products.json` maps every known
-product/PID to one.
-
-```console
-$ ./8bitdo-download.py --list-products
-$ ./8bitdo-download.py --type 75              # list builds for the Ultimate 2C Wireless
-$ ./8bitdo-download.py --type 75 --latest -o fw
-$ ./8bitdo-download.py --all -o fw            # every build of every product
-$ ./8bitdo-download.py --scan 1-255           # probe the whole type range
-```
-
-The API it uses:
-
-```
-POST https://support.8bitdo.com/restapi/link/v1/client/firmware/select
-     {"firmware_type": 75, "beta": 0}
-  -> {"code":200,"data":[{file_version, fileURL, fileSize, md5,
-                          created_at, readme_en, beta}, ...]}
-```
-
-Note: the `md5` field in that response is not trustworthy (it is identical
-across different builds). The scripts check `fileSize` and treat md5 as a hint.
-Firmware URLs point at `support.8bitdo.com/bd-uploads/files/...` and need no
-auth.
-
-## The protocol
-
-Everything below came out of the site's JS bundle of the updater site
-(`connectDevice-*.js` / `index-*.js`).
-
-### Transport
-
-WebHID, vendor id `0x2dc8`. The firmware interface is a 63-byte vendor
-collection (for the Ultimate 2C it is usage page `0xFF7A`, report id `0x81` out,
-`0x02` in). `hidfilters.json` is the site's own filter table, used to pick the
-right interface per product.
-
-In app mode the HID output report is `0x81`; in the bootloader the report id is
-`0` (send the bare 63-byte payload).
-
-```
-request   [tag u8][cmd u16][params u16][len u16][crc u16][total u32][offset u32][data…]
-response  [tag u8][status u16][cmd echo u16][len u16][crc u16][total u32][offset u32][data…]
-```
-
-All little-endian. `tag` is `0x05` in app mode, `0x04` in the bootloader.
-`crc` is CRC-16/ARC (poly `0xA001`, init `0xFFFF`) over `data` only — it is
-**required** on write packets; the device answers status `1` without it.
-`status 0` means OK.
-
-| cmd | meaning | fields |
-|---|---|---|
-| `0x0008` | read mapped device PID | `total=4` |
-| `0x0005` | read flash | `len`/`total` = bytes, `offset` = **absolute** flash address |
-| `0x00C3` | read block CRC-16 | `data={address,len,block_size}` |
-| `0x0004` | erase block | `total` = length, `offset` = address |
-| `0x0003` | write chunk | `data` = ≤46 bytes, `total` = firmware length, `offset` = address + position |
-| `0x00C4` | save flash info | `len=8`, `data={firmware_len u32, version u32}` |
-| `0x0007` | reset device | — |
-
-### Firmware file
-
-28-byte header, then the encrypted payload:
-
-```
-u32 version      e.g. 109 -> v1.09
-u32 desAddress   0x6000
-u32 desLen       74752
-u32 pid          the *mapped* pid, 0x301b for the 2C Wireless
-… 12 bytes zero …
-payload          desLen bytes (encrypted — see 8cryptdo/)
-```
-
-More sections can follow; the updater only ever flashes section 1 for products
-in its "single section" list (`gt` in the bundle), which is where the 2C
-Wireless sits.
-
-### Update sequence
-
-The web app does it in place, in app mode, no bootloader round-trip:
-
-1. `read pid` (`0x0008`) → mapped pid (`0x301b`), look up `firmware_type`.
-2. `POST /client/firmware/select` → build list; user picks one.
-3. For each 4096-byte block of the payload, at device address `0`
-   (erase/write/CRC addresses are *application-relative*: address 0 lands at
-   flash `0x6000`; `cmd 0x0005` reads absolute flash, so a dump starts at
-   `0x6000`):
-   - compute CRC-16 of the block, ask the device for its CRC (`0x00C3`);
-   - equal → skip (this is why a reflash is fast and why an interrupted
-     update can resume);
-   - different → erase (`0x0004`), write in 46-byte chunks (`0x0003`), verify
-     CRC again.
-4. Save `{desLen, version}` (`0x00C4`).
-5. Reset (`0x0007`); the controller re-enumerates.
-
-The tool additionally prints per-block results and aborts on a write that does
-not read back correctly.
-
-**Receivers reboot when erased.** The `0x301c` resets ~1 s after a block is
-erased (its firmware evidently checks itself), which kills the hidraw fd
-mid-write. The updater therefore reconnects on I/O error and resumes at the
-*current 46-byte chunk* rather than restarting the block; without that, flashing
-a dongle fails on the first write packet and leaves the block half-written.
-
-## Safety notes
-
-* The updater never touches the bootloader region, so a failed or interrupted
-  write is recoverable — re-run `update`, or use the official site.
-* `verify` and `backup` are read-only; use them first on a new device.
-* Flashing rewrites address 0 of the application region while the controller
-  runs from it. That is exactly what the vendor's tool does, but don't unplug
-  mid-write.
-
-## Sources
-
-* `products.json` / `hidfilters.json` extracted from the site bundle.
-* `scan.txt` — `--scan 1-255` output (stopped at type 130): 103 `firmware_type`
-  values actually serve builds, i.e. the set of products with downloadable
-  firmware. Most modern controllers live in the 40-130 range.
+The scripts and documentation here are MIT. The .dat images are byte-patches of 8BitDo's own firmware and therefore embed their code. They are shared for personal, interoperability use only; 8BitDo's firmware remains 8BitDo's. No affiliation with 8BitDo. Flash at your own risk: a failed flash is recoverable via the LB+RB bootloader, but a misapplied patch may brick the device.
