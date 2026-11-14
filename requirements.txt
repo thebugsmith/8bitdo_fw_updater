@@ -1,0 +1,2 @@
+# USB operations. Linux uses hidraw; Windows/macOS use hid (both from hidapi).
+hidapi>=0.14,<0.16

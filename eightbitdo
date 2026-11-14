@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+script_dir=$(CDPATH= cd -P "$(dirname "$0")" && pwd)
+if [ ! -x "$script_dir/.venv/bin/python" ]; then
+    printf '%s\n' 'Environment missing. From this folder, run: python3 install.py' >&2
+    exit 1
+fi
+exec "$script_dir/.venv/bin/python" "$script_dir/eightbitdo.py" "$@"

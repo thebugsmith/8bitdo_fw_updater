@@ -1,3 +1,32 @@
+.venv/
+venv/
 __pycache__/
-*.pyc
-fw/*.dat
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Firmware downloads, custom images, dumps and USB traces
+firmware/
+*.dat
+*.bin
+*.jsonl
+*.log
+.firmware-*.tmp
+
+# test
+HARDWARE_TEST_RESULTS.json
+LOCAL_TEST_RESULTS.json
+TEST_RESULTS.txt
+
+.env
+.env.*
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
